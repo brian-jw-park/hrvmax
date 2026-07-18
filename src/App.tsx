@@ -12,7 +12,7 @@ import {
   Thermometer,
   Waves,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { dailyMetrics, type DailyMetric } from "./data/ouraFixture";
 
 type MetricKey =
@@ -29,14 +29,14 @@ type Recap = {
   date: string;
 };
 
-const sortedMetrics = [...dailyMetrics].sort((a, b) =>
-  a.date.localeCompare(b.date),
-);
-const today = sortedMetrics[sortedMetrics.length - 1];
-const yesterday = sortedMetrics[sortedMetrics.length - 2];
-const trailingWeek = sortedMetrics.slice(-7);
-const priorWeek = sortedMetrics.slice(-14, -7);
-const baselineWindow = sortedMetrics.slice(0, -1);
+type OuraMetricsResponse = {
+  configured: boolean;
+  source: "oura" | "fixture";
+  connected: boolean;
+  grantedScopes: string | null;
+  lastSyncedAt: string | null;
+  metrics: DailyMetric[];
+};
 
 function average(records: DailyMetric[], key: MetricKey) {
   if (!records.length) return 0;
@@ -56,6 +56,15 @@ function formatDate(date: string) {
     month: "short",
     day: "numeric",
   }).format(new Date(`${date}T12:00:00`));
+}
+
+function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
 }
 
 function formatWeekday(date: string) {
@@ -147,14 +156,20 @@ function buildRecaps(records: DailyMetric[]): Recap[] {
   const highestHrv = findMax(records, "hrvAvg");
   const lowestHr = findMin(records, "restingHr");
 
-  const biggestRebound = records.slice(1).reduce(
-    (best, record, index) => {
-      const previous = records[index];
-      const rebound = record.readinessScore - previous.readinessScore;
-      return rebound > best.rebound ? { record, rebound } : best;
-    },
-    { record: records[1], rebound: records[1].readinessScore - records[0].readinessScore },
-  );
+  const biggestRebound =
+    records.length > 1
+      ? records.slice(1).reduce(
+          (best, record, index) => {
+            const previous = records[index];
+            const rebound = record.readinessScore - previous.readinessScore;
+            return rebound > best.rebound ? { record, rebound } : best;
+          },
+          {
+            record: records[1],
+            rebound: records[1].readinessScore - records[0].readinessScore,
+          },
+        )
+      : { record: records[0], rebound: 0 };
 
   return [
     {
@@ -196,19 +211,80 @@ function buildRecaps(records: DailyMetric[]): Recap[] {
   ];
 }
 
-const status = statusCopy(today);
-const baseline = {
-  sleepScore: average(baselineWindow, "sleepScore"),
-  readinessScore: average(baselineWindow, "readinessScore"),
-  hrvAvg: average(baselineWindow, "hrvAvg"),
-  restingHr: average(baselineWindow, "restingHr"),
-  sleepDurationMinutes: average(baselineWindow, "sleepDurationMinutes"),
-};
-const weekAverage = average(trailingWeek, "readinessScore");
-const priorWeekAverage = average(priorWeek, "readinessScore");
-const recaps = buildRecaps(sortedMetrics);
-
 function App() {
+  const [ouraData, setOuraData] = useState<OuraMetricsResponse>({
+    configured: false,
+    source: "fixture",
+    connected: false,
+    grantedScopes: null,
+    lastSyncedAt: null,
+    metrics: [],
+  });
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let ignore = false;
+
+    fetch("/api/oura/daily-metrics")
+      .then((response) => {
+        if (!response.ok) throw new Error("Unable to load Oura data.");
+        return response.json() as Promise<OuraMetricsResponse>;
+      })
+      .then((data) => {
+        if (!ignore) setOuraData(data);
+      })
+      .catch(() => {
+        if (!ignore) {
+          setApiError("Using sample data. Start the local API server to connect Oura.");
+        }
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  async function refreshOuraData() {
+    setIsRefreshing(true);
+    setApiError(null);
+    try {
+      const response = await fetch("/api/oura/refresh", { method: "POST" });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error ?? "Unable to refresh Oura data.");
+      }
+      setOuraData(data);
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "Unable to refresh Oura data.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  }
+
+  const activeMetrics = ouraData.metrics.length ? ouraData.metrics : dailyMetrics;
+  const sortedMetrics = [...activeMetrics].sort((a, b) => a.date.localeCompare(b.date));
+  const today = sortedMetrics[sortedMetrics.length - 1];
+  const yesterday = sortedMetrics[sortedMetrics.length - 2] ?? today;
+  const trailingWeek = sortedMetrics.slice(-7);
+  const priorWeek = sortedMetrics.slice(-14, -7);
+  const baselineWindow = sortedMetrics.slice(0, -1);
+  const status = statusCopy(today);
+  const baseline = {
+    sleepScore: average(baselineWindow, "sleepScore"),
+    readinessScore: average(baselineWindow, "readinessScore"),
+    hrvAvg: average(baselineWindow, "hrvAvg"),
+    restingHr: average(baselineWindow, "restingHr"),
+    sleepDurationMinutes: average(baselineWindow, "sleepDurationMinutes"),
+  };
+  const weekAverage = average(trailingWeek, "readinessScore");
+  const priorWeekAverage = average(priorWeek, "readinessScore");
+  const recaps = buildRecaps(sortedMetrics);
+  const dataSourceLabel = ouraData.connected && ouraData.metrics.length ? "Oura connected" : "Sample data";
+  const updatedLabel = ouraData.lastSyncedAt
+    ? `Synced ${formatDateTime(ouraData.lastSyncedAt)}`
+    : `Updated ${formatDate(today.date)}`;
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -223,10 +299,25 @@ function App() {
             </div>
           </div>
           <div className="data-source">
-            <span>Local fixture</span>
-            <strong>Updated {formatDate(today.date)}</strong>
+            <span>{dataSourceLabel}</span>
+            <strong>{updatedLabel}</strong>
+            <div className="data-actions">
+              {ouraData.connected ? (
+                <button type="button" onClick={refreshOuraData} disabled={isRefreshing}>
+                  {isRefreshing ? "Refreshing" : "Refresh"}
+                </button>
+              ) : !ouraData.configured ? (
+                <button type="button" disabled>
+                  Configure Oura
+                </button>
+              ) : (
+                <a href="/api/oura/connect">Connect Oura</a>
+              )}
+            </div>
           </div>
         </nav>
+
+        {apiError ? <div className="api-alert">{apiError}</div> : null}
 
         <div className="status-grid">
           <section className={`today-status ${scoreTone(today.readinessScore)}`}>

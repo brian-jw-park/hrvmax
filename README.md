@@ -16,6 +16,8 @@ Start the app:
 npm run dev
 ```
 
+This starts both the local API server and the Vite web app.
+
 Build for production:
 
 ```bash
@@ -23,3 +25,28 @@ npm run build
 ```
 
 The first prototype uses fixture data in `src/data/ouraFixture.ts`. Real Oura OAuth, login, friends, and sync are intentionally deferred.
+
+## Oura Local Setup
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Fill in:
+
+```bash
+OURA_CLIENT_ID=
+OURA_CLIENT_SECRET=
+OURA_REDIRECT_URI=http://localhost:5173/api/oura/callback
+OURA_SCOPES=daily spo2
+```
+
+In the Oura developer portal, register the same redirect URI:
+
+```text
+http://localhost:5173/api/oura/callback
+```
+
+Then start the app and use **Connect Oura** in the dashboard. Tokens and synced data are stored locally under `.local/`, which is ignored by git.

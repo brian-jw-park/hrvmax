@@ -129,6 +129,45 @@ h1 {
   font-size: 0.9rem;
 }
 
+.data-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.data-actions a,
+.data-actions button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border: 1px solid #d6dbe1;
+  border-radius: 7px;
+  padding: 0 10px;
+  color: #101114;
+  background: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.data-actions button:disabled {
+  color: #727882;
+  cursor: wait;
+}
+
+.api-alert {
+  margin-top: 12px;
+  border: 1px solid #e6d6a8;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #725917;
+  background: #fff7da;
+  font-size: 0.85rem;
+  font-weight: 680;
+}
+
 .status-grid {
   display: grid;
   grid-template-columns: minmax(300px, 1.22fr) repeat(3, minmax(170px, 1fr));
@@ -572,6 +611,10 @@ h1 {
 
   .data-source {
     text-align: left;
+  }
+
+  .data-actions {
+    justify-content: flex-start;
   }
 
   .status-grid,
