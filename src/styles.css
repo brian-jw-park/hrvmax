@@ -1,6 +1,6 @@
 :root {
-  color: #151515;
-  background: #f4f1ea;
+  color: #101114;
+  background: #f7f8fa;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -18,8 +18,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(244, 241, 234, 0) 280px),
-    #f4f1ea;
+    linear-gradient(180deg, #ffffff 0, #f7f8fa 340px),
+    #f7f8fa;
 }
 
 button,
@@ -30,17 +30,26 @@ select {
 }
 
 .app-shell {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1240px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 24px 0 48px;
+  padding: 26px 0 52px;
+}
+
+.hero-panel,
+.metric-card,
+.trend-card,
+.month-panel,
+.recap-panel,
+.metric-row,
+.day-tile {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(16, 17, 20, 0.03);
 }
 
 .hero-panel {
-  padding: 20px;
-  border: 1px solid #ded8cd;
-  border-radius: 8px;
-  background: #fffdf8;
-  box-shadow: 0 20px 80px rgba(28, 25, 20, 0.08);
+  padding: 18px;
 }
 
 .top-bar,
@@ -56,8 +65,8 @@ select {
 .top-bar {
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #e7e1d6;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #edf0f3;
 }
 
 .brand-lockup {
@@ -67,22 +76,27 @@ select {
   min-width: 0;
 }
 
-.brand-mark {
+.brand-mark,
+.metric-top > span,
+.metric-row > span {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  border-radius: 7px;
+  color: #f8fafc;
+  background: #111318;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
   flex: 0 0 auto;
-  border-radius: 8px;
-  color: #fffdf8;
-  background: #151515;
 }
 
 .eyebrow {
   margin: 0 0 4px;
-  color: #70695f;
-  font-size: 0.72rem;
-  font-weight: 750;
+  color: #727882;
+  font-size: 0.7rem;
+  font-weight: 760;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -96,8 +110,9 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-size: clamp(1.22rem, 1.7vw, 1.62rem);
   line-height: 1;
+  letter-spacing: 0;
 }
 
 .data-source {
@@ -105,66 +120,56 @@ h1 {
   gap: 3px;
   min-width: 150px;
   text-align: right;
-  color: #70695f;
-  font-size: 0.82rem;
+  color: #727882;
+  font-size: 0.78rem;
 }
 
 .data-source strong {
-  color: #151515;
-  font-size: 0.95rem;
+  color: #101114;
+  font-size: 0.9rem;
 }
 
 .status-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 1.35fr) repeat(3, minmax(160px, 1fr));
-  gap: 14px;
-  padding-top: 18px;
-}
-
-.today-status,
-.metric-card,
-.trend-card,
-.month-panel,
-.recap-panel,
-.metric-row {
-  border: 1px solid #e3ddd1;
-  border-radius: 8px;
-  background: #fbf8f0;
+  grid-template-columns: minmax(300px, 1.22fr) repeat(3, minmax(170px, 1fr));
+  gap: 12px;
+  padding-top: 16px;
 }
 
 .today-status {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 18px;
-  min-height: 210px;
-  padding: 22px;
+  min-height: 184px;
+  padding: 20px;
   overflow: hidden;
+  border: 1px solid #1d2733;
+  border-radius: 8px;
+}
+
+.today-status.excellent,
+.today-status.steady,
+.today-status.mixed,
+.today-status.rough {
+  color: #f8fafc;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 44%),
+    #18212c;
 }
 
 .today-status.excellent {
-  background: #102c24;
-  color: #f8fff9;
+  border-color: #1b3a34;
 }
 
-.today-status.steady {
-  background: #173247;
-  color: #f8fbff;
-}
-
-.today-status.mixed {
-  background: #443416;
-  color: #fff9ef;
-}
-
+.today-status.mixed,
 .today-status.rough {
-  background: #3d2321;
-  color: #fff7f4;
+  border-color: #3b3030;
 }
 
 .today-status .eyebrow,
 .today-status p {
   color: currentColor;
-  opacity: 0.72;
+  opacity: 0.68;
 }
 
 .status-copy {
@@ -172,95 +177,98 @@ h1 {
 }
 
 .status-copy h2 {
-  margin-bottom: 10px;
-  font-size: clamp(2.4rem, 6vw, 5.8rem);
-  line-height: 0.88;
+  margin-bottom: 12px;
+  font-size: clamp(2.2rem, 5vw, 4.7rem);
+  line-height: 0.9;
+  letter-spacing: 0;
 }
 
 .status-copy p:last-child {
-  max-width: 430px;
+  max-width: 380px;
   margin-bottom: 0;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.55;
 }
 
 .score-orbit {
   display: grid;
   place-items: center;
   align-self: center;
-  width: 126px;
+  width: 108px;
   aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(248, 250, 252, 0.18);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(248, 250, 252, 0.06);
 }
 
 .score-orbit span {
   display: block;
-  font-size: 2.4rem;
+  font-size: 2.05rem;
   font-weight: 820;
   line-height: 1;
 }
 
 .score-orbit small {
-  margin-top: -18px;
+  margin-top: -14px;
   color: currentColor;
-  font-size: 0.7rem;
-  opacity: 0.72;
+  font-size: 0.64rem;
+  opacity: 0.62;
   text-transform: uppercase;
 }
 
 .metric-card {
-  min-height: 210px;
+  min-height: 184px;
   padding: 18px;
 }
 
 .metric-top {
   justify-content: space-between;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .metric-top > span {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: #151515;
-  color: #fffdf8;
+  width: 30px;
+  height: 30px;
+}
+
+.metric-top > span svg,
+.metric-row > span svg,
+.brand-mark svg {
+  width: 16px;
+  height: 16px;
 }
 
 .metric-top small,
 .week-change {
   border-radius: 999px;
-  padding: 6px 8px;
-  font-size: 0.78rem;
+  padding: 5px 8px;
+  font-size: 0.74rem;
   font-weight: 760;
 }
 
 .positive {
-  color: #0f684d;
-  background: #dff4e9;
+  color: #0f6b57;
+  background: #e6f5f0;
 }
 
 .negative {
-  color: #8b2c20;
-  background: #f7ded8;
+  color: #9a3d35;
+  background: #f8e8e6;
 }
 
 .metric-card h3,
 .trend-card h3,
 .recap-card h3 {
   margin-bottom: 7px;
-  color: #70695f;
-  font-size: 0.83rem;
+  color: #727882;
+  font-size: 0.8rem;
   font-weight: 760;
 }
 
 .metric-card strong {
   display: block;
   margin-bottom: 8px;
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-size: clamp(1.7rem, 2.7vw, 2.25rem);
   line-height: 1;
 }
 
@@ -268,57 +276,58 @@ h1 {
 .recap-card p,
 .metric-row small {
   margin-bottom: 0;
-  color: #70695f;
+  color: #727882;
   line-height: 1.42;
 }
 
 .section-band,
 .insight-layout,
 .detail-band {
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 .section-band {
-  padding: 20px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  background: #ebe4d7;
+  background: #f1f3f6;
 }
 
 .section-heading {
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .section-heading h2 {
   margin-bottom: 0;
-  font-size: clamp(1.45rem, 3vw, 2.25rem);
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
   line-height: 1.05;
+  letter-spacing: 0;
 }
 
 .section-heading.compact h2 {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
 }
 
 .week-change {
   gap: 6px;
-  color: #0f684d;
-  background: #dff4e9;
+  color: #0f6b57;
+  background: #e6f5f0;
   white-space: nowrap;
 }
 
 .week-strip {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .day-tile {
-  min-height: 172px;
-  padding: 12px;
-  border: 1px solid #d9d0c2;
-  border-radius: 8px;
-  background: #fffdf8;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  min-height: 104px;
+  padding: 11px;
 }
 
 .day-label {
@@ -327,179 +336,177 @@ h1 {
 }
 
 .day-label span {
-  color: #70695f;
-  font-size: 0.8rem;
+  color: #727882;
+  font-size: 0.76rem;
   font-weight: 720;
 }
 
 .day-label strong {
-  font-size: 1.3rem;
+  font-size: 1.05rem;
 }
 
 .day-bar {
   position: relative;
-  height: 86px;
-  margin: 14px 0 10px;
+  height: 5px;
+  margin: 16px 0 14px;
   overflow: hidden;
-  border-radius: 8px;
-  background: #ede6dc;
+  border-radius: 999px;
+  background: #eef1f5;
 }
 
 .day-bar span {
   position: absolute;
-  right: 0;
+  top: 0;
   bottom: 0;
   left: 0;
-  min-height: 18%;
-  border-radius: 8px 8px 0 0;
-  background: #1d8a63;
+  min-width: 12%;
+  border-radius: 999px;
+  background: #1f8f78;
 }
 
 .day-tile p {
   margin-bottom: 0;
-  color: #70695f;
-  font-size: 0.78rem;
+  color: #727882;
+  font-size: 0.74rem;
 }
 
 .trend-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 14px;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .trend-card {
-  min-height: 170px;
-  padding: 16px;
+  min-height: 144px;
+  padding: 14px;
 }
 
 .trend-card strong {
-  font-size: 1.6rem;
+  font-size: 1.42rem;
 }
 
 .trend-card svg {
   width: 100%;
-  height: 76px;
-  margin-top: 18px;
+  height: 60px;
+  margin-top: 16px;
   overflow: visible;
 }
 
 .trend-card path {
   fill: none;
-  stroke-width: 5;
+  stroke-width: 3.25;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .trend-card.green path {
-  stroke: #1d8a63;
+  stroke: #1f8f78;
 }
 
 .trend-card.blue path {
-  stroke: #246b9f;
+  stroke: #2b6fa3;
 }
 
 .trend-card.coral path {
-  stroke: #d65d45;
+  stroke: #d05a49;
 }
 
 .insight-layout {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
-  gap: 18px;
+  gap: 14px;
 }
 
 .month-panel,
 .recap-panel {
-  padding: 18px;
+  padding: 16px;
 }
 
 .heatmap {
   display: grid;
   grid-template-columns: repeat(6, minmax(34px, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 
 .heat-cell {
   display: grid;
   place-items: center;
-  min-height: 44px;
-  border-radius: 8px;
-  color: #151515;
-  font-size: 0.78rem;
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #101114;
+  font-size: 0.74rem;
   font-weight: 760;
 }
 
 .heat-cell.excellent {
-  background: #1d8a63;
-  color: #f8fff9;
+  color: #0f3f35;
+  background: #d7f0e9;
 }
 
 .heat-cell.steady {
-  background: #75b7dc;
+  color: #1f4567;
+  background: #dbeaf5;
 }
 
 .heat-cell.mixed {
-  background: #f0c15b;
+  color: #685018;
+  background: #f5e9c8;
 }
 
 .heat-cell.rough {
-  background: #d65d45;
-  color: #fff7f4;
+  color: #853a32;
+  background: #f5dcd8;
 }
 
 .recap-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .recap-card {
-  min-height: 148px;
-  padding: 14px;
-  border: 1px solid #e3ddd1;
+  min-height: 132px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  background: #fffdf8;
+  background: #ffffff;
 }
 
 .recap-card span {
-  color: #70695f;
-  font-size: 0.74rem;
+  color: #727882;
+  font-size: 0.7rem;
   font-weight: 740;
 }
 
 .recap-card h3 {
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .recap-card strong {
   display: block;
   margin-bottom: 8px;
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-size: clamp(1.28rem, 2.2vw, 1.78rem);
   line-height: 1;
 }
 
 .detail-band {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 
 .metric-row {
-  gap: 12px;
-  min-height: 86px;
-  padding: 14px;
+  gap: 11px;
+  min-height: 76px;
+  padding: 12px;
 }
 
 .metric-row > span {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   flex: 0 0 auto;
-  border-radius: 8px;
-  background: #151515;
-  color: #fffdf8;
 }
 
 .metric-row div {
@@ -508,20 +515,20 @@ h1 {
 
 .metric-row p {
   margin-bottom: 4px;
-  color: #70695f;
-  font-size: 0.78rem;
+  color: #727882;
+  font-size: 0.74rem;
   font-weight: 740;
 }
 
 .metric-row strong {
   display: block;
-  font-size: 1rem;
+  font-size: 0.94rem;
   white-space: nowrap;
 }
 
 .metric-row small {
   margin-left: auto;
-  max-width: 116px;
+  max-width: 112px;
   text-align: right;
 }
 
@@ -546,7 +553,7 @@ h1 {
 
 @media (max-width: 720px) {
   .app-shell {
-    width: min(100% - 20px, 1180px);
+    width: min(100% - 20px, 1240px);
     padding-top: 10px;
   }
 
@@ -579,17 +586,17 @@ h1 {
   }
 
   .score-orbit {
-    width: 112px;
+    width: 104px;
   }
 
   .week-strip {
-    grid-template-columns: repeat(7, 96px);
+    grid-template-columns: repeat(7, 88px);
     overflow-x: auto;
     padding-bottom: 8px;
   }
 
   .day-tile {
-    min-height: 156px;
+    min-height: 132px;
   }
 
   .heatmap {

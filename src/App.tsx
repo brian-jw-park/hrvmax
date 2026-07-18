@@ -292,7 +292,7 @@ function App() {
                 <strong>{day.readinessScore}</strong>
               </div>
               <div className="day-bar">
-                <span style={{ height: `${day.readinessScore}%` }} />
+                <span style={{ width: `${day.readinessScore}%` }} />
               </div>
               <p>{formatDuration(day.sleepDurationMinutes)}</p>
             </article>
