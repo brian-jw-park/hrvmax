@@ -24,7 +24,23 @@ Build for production:
 npm run build
 ```
 
+Build for GitHub Pages:
+
+```bash
+npm run build:pages
+```
+
 The first prototype uses fixture data in `src/data/ouraFixture.ts`. Real Oura OAuth, login, friends, and sync are intentionally deferred.
+
+## Public Oura Application URLs
+
+Once GitHub Pages is enabled for this repo, use:
+
+```text
+Website: https://brian-jw-park.github.io/hrvmax/
+Privacy Policy: https://brian-jw-park.github.io/hrvmax/privacy/
+Terms of Service: https://brian-jw-park.github.io/hrvmax/terms/
+```
 
 ## Oura Local Setup
 
